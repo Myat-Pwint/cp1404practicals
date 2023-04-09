@@ -1,5 +1,5 @@
 """
-CP1404/CP5632 Practical
+CP1404/CP5632 Practical 4
 List comprehensions
 """
 
@@ -40,7 +40,7 @@ numbers = [int(num) for num in almost_numbers]
 print(numbers)
 
 # list comprehension to create a list of only the numbers that are
-# greater than 9 from the numbers (not strings) you just created
+# greater than 9 from the numbers (not strings)
 large_number = [num for num in numbers if num > 9]
 print(large_number)
 
