@@ -1,11 +1,13 @@
 import csv
 
+
 def main():
     champion_data = read_csv_file("wimbledon.csv")
     champtions = get_champions(champion_data)
     display_champions(champtions)
     countries = get_countries(champion_data)
     display_countries(countries)
+
 
 def read_csv_file(file_name):
     with open(file_name, "r", encoding="utf-8-sig") as in_file:
@@ -42,7 +44,6 @@ def display_champions(champions):
 def display_countries(countries):
     print(f"\nThese {len(countries)} countries have won Wimbledon: ")
     print(", ".join(countries))
-
 
 
 main()
