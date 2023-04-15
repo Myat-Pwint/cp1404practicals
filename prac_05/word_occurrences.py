@@ -1,20 +1,21 @@
 """
 Word Occurrences
-Estimate: 30 minutes
-Actual:minutes
+Estimate: 25 minutes
+Actual: 35 minutes
 """
 
-count = {}
+counts = {}
 text = input("Text: ")
 
 for word in text.split():
-    if word in count:
-        count[word] += 1
+    if word in counts:
+        counts[word] += 1
     else:
-        count[word] = 1
+        counts[word] = 1
 
-
+max_width = max(len(word) for word in counts.keys())
 
 print("Text: ", text)
-for word, count in count.items():
-    print(word, ":", count)
+for word in sorted(counts):
+    count = counts[word]
+    print(f"{word:{max_width}} : {count}")
