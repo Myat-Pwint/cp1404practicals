@@ -32,9 +32,9 @@ def main():
     print("Thank you for using custom-built project management software.")
 
 
-def load_projects(filename):
+def load_projects(FILENAME):
     """Load projects from a file."""
-    with open(filename, "r") as file:
+    with open(FILENAME, "r") as file:
         file.readline()
         for line in file:
             name, start_date, priority, cost_estimate, completion_percentage = line.strip().split("\t")
@@ -43,9 +43,9 @@ def load_projects(filename):
     return projects
 
 
-def save_projects(filename):
+def save_projects(FILENAME):
     """Save updated projects to projects.txt"""
-    with open(filename, "w") as out_file:
+    with open(FILENAME, "w") as out_file:
         out_file.write("Name\tStart Date\tPriority\tEstimate\tCompletion Percentage\n")
         for project in projects:
             out_file.write(
