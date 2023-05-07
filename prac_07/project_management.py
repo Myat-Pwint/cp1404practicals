@@ -1,5 +1,6 @@
 import datetime
 from prac_07.project import Project
+from operator import itemgetter
 
 MENU = "(L)oad projects\n(S)ave projects\n(D)isplay projects\n(F)ilter projects by date\n(A)dd new project\n(U)pdate " \
        "project\n(Q)uit"
@@ -16,7 +17,7 @@ def main():
         elif choice == "S":
             save_projects(FILENAME)
         elif choice == "D":
-            display_projects()
+            display_projects(projects)
         elif choice == "F":
             filter_projects_by_date()
         elif choice == "A":
@@ -39,6 +40,7 @@ def load_projects(filename):
             name, start_date, priority, cost_estimate, completion_percentage = line.strip().split("\t")
             start_date = datetime.datetime.strptime(start_date, "%d/%m/%Y").date()
             projects.append(Project(name, start_date, int(priority), float(cost_estimate), int(completion_percentage)))
+    return projects
 
 
 def save_projects(filename):
@@ -50,18 +52,22 @@ def save_projects(filename):
                 f"{project.name}\t{project.start_date.strftime('%d/%m/%Y')}\t{project.priority}\t{project.cost_estimate:.2f}\t{project.completion_percentage}\n")
 
 
-def display_projects():
+def display_projects(projects):
     """Display all projects, grouped by complete/incomplete and sorted by priority."""
-    incomplete_projects = [project for project in projects if int(project.completion_percentage) < 100]
-    incomplete_projects.sort()
+    store_projects = [
+        {"project": project, "priority": project.priority, "completion_percentage": project.completion_percentage}
+        for project in projects]
+    incomplete_projects = sorted([item for item in store_projects if item["completion_percentage"] < 100],
+                                 key=itemgetter("priority"))
+    completed_projects = sorted([item for item in store_projects if item["completion_percentage"] == 100],
+                                key=itemgetter("priority"))
+
     print("Incomplete projects: ")
-    for incomplete_project in incomplete_projects:
-        print(f"    {incomplete_project}")
-    completed_projects = [project for project in projects if int(project.completion_percentage) == 100]
-    completed_projects.sort()
+    for item in incomplete_projects:
+        print(f"    {item['project']}")
     print("Complete projects: ")
-    for completed_project in completed_projects:
-        print(f"    {completed_project}")
+    for item in completed_projects:
+        print(f"    {item['project']}")
 
 
 def filter_projects_by_date():
@@ -91,10 +97,16 @@ def add_projects():
 def update_projects():
     """Update projects """
     for number, project in enumerate(projects, 0):
-        print(number, project)
+        print(f"{number}, {project}")
     project_choice = int(input("Project choice: "))
     selected_project = projects[project_choice]
     print(selected_project)
+    new_completion = input("New Percentage: ")
+    new_priority = input("New Priority: ")
+    if new_completion:
+        selected_project.completion_percentage = int(new_completion)
+    if new_priority:
+        selected_project.priority = int(new_priority)
 
 
 main()
