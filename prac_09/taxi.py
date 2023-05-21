@@ -37,4 +37,3 @@ class SilverServiceTaxi(Taxi):
         super().__init__(name, fuel)
         self.fanciness = fanciness
         self.price_per_km *= fanciness
-
