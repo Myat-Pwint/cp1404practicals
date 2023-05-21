@@ -1,58 +1,62 @@
 from taxi import Taxi, SilverServiceTaxi
 
+MENU = "q)uit, c)hoose taxi, d)rive"
+
+
+def main():
+    taxis = [Taxi("Prius", 100), SilverServiceTaxi("Limo", 100, 2), SilverServiceTaxi("Hummer", 200, 4)]
+    current_taxi = None
+    total_bill = 0.0
+
+    print("Let's drive!")
+    choice = ""
+
+    while choice != "q":
+        print(MENU)
+        choice = input(">>> ").lower()
+
+        if choice == "c":
+            print("Taxis available:")
+            display_taxis(taxis)
+            choose_taxi(taxis, total_bill)
+
+        elif choice == "d":
+            drive_taxi(current_taxi, total_bill)
+
+        elif choice != "q":
+            print("Invalid option")
+            print("Bill to date: ${:.2f}".format(total_bill))
+
+    print("Total trip cost: ${:.2f}".format(total_bill))
+    print("Taxis are now:")
+    display_taxis(taxis)
+
 
 def display_taxis(taxis):
     for i, taxi in enumerate(taxis):
         print(f"{i} - {taxi}")
 
 
-def choose_taxi(taxis):
-    while True:
-        try:
-            choice = int(input("Choose taxi: "))
-            if 0 <= choice < len(taxis):
-                return taxis[choice]
-            else:
-                print("Invalid taxi choice")
-        except ValueError:
-            print("Invalid input")
+def choose_taxi(taxis, total_bill):
+    taxi_choice = int(input("Choose taxi: "))
 
+    if taxi_choice < 0 or taxi_choice >= len(taxis):
+        print("Invalid taxi choice")
+        print("Bill to date: ${:.2f}".format(total_bill))
+    else:
+        current_taxi = taxis[taxi_choice]
+        print("Bill to date: ${:.2f}".format(total_bill))
 
-def main():
-    print("Let's drive!")
-    taxis = [Taxi("Prius", 100), SilverServiceTaxi("Limo", 100, 2), SilverServiceTaxi("Hummer", 200, 4)]
-    current_taxi = None
-    bill = 0.0
-
-    while True:
-        print("q)uit, c)hoose taxi, d)rive")
-        choice = input(">>> ").lower()
-
-        if choice == 'q':
-            break
-        elif choice == 'c':
-            display_taxis(taxis)
-            current_taxi = choose_taxi(taxis)
-            print("Bill to date: ${:.2f}".format(bill))
-        elif choice == 'd':
-            if current_taxi is None:
-                print("You need to choose a taxi before you can drive")
-            else:
-                try:
-                    distance = float(input("Drive how far? "))
-                    fare = current_taxi.drive(distance)
-                    bill += fare
-                    print("Your {} trip cost you ${:.2f}".format(current_taxi.name, fare))
-                    print("Bill to date: ${:.2f}".format(bill))
-                except ValueError:
-                    print("Invalid distance")
-        else:
-            print("Invalid option")
-            print("Bill to date: ${:.2f}".format(bill))
-
-    print("Total trip cost: ${:.2f}".format(bill))
-    print("Taxis are now:")
-    display_taxis(taxis)
-
+def drive_taxi(current_taxi, total_bill):
+    if current_taxi is None:
+        print("You need to choose a taxi before you can drive")
+        print("Bill to date: ${:.2f}".format(total_bill))
+    else:
+        distance = float(input("Drive how far? "))
+        fare = current_taxi.get_fare(distance)
+        current_taxi.start_fare()
+        total_bill += fare
+        print("Your {} trip cost you ${:.2f}".format(current_taxi.name, fare))
+        print("Bill to date: ${:.2f}".format(total_bill))
 
 main()
