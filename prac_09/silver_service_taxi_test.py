@@ -6,4 +6,3 @@ my_taxi = SilverServiceTaxi("Hummer", 200, 2)
 my_taxi.drive(18)
 fare = my_taxi.get_fare()
 print("Fare: ${:.2f}".format(fare))
-
