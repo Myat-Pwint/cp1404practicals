@@ -16,18 +16,20 @@ class Taxi(Car):
                                                              self.price_per_km)
 
     def get_fare(self):
-        """Return the price for the taxi trip."""
         return self.price_per_km * self.current_fare_distance
 
     def start_fare(self):
-        """Begin a new fare."""
         self.current_fare_distance = 0
 
     def drive(self, distance):
-        """Drive like parent Car but calculate fare distance as well."""
-        distance_driven = super().drive(distance)
-        self.current_fare_distance += distance_driven
-        return distance_driven
+        if self.current_fare_distance == 0:
+            print("You need to choose a taxi before you can drive")
+        else:
+            distance_driven = super().drive(distance)
+            if distance_driven != 0:
+                self.current_fare_distance += distance_driven
+                return distance_driven
+        return 0
 
 
 class SilverServiceTaxi(Taxi):
